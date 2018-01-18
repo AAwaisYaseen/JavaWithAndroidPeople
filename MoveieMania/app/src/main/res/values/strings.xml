@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MoveieMania</string>
+    <string name="this_is_for_dummy_icon_area">this is for dummy icon area</string>
+    <string name="movie_title">Movie Title</string>
+</resources>
