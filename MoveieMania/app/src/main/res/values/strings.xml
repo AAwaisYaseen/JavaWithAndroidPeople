@@ -2,4 +2,11 @@
     <string name="app_name">MoveieMania</string>
     <string name="this_is_for_dummy_icon_area">this is for dummy icon area</string>
     <string name="movie_title">Movie Title</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="_1">1</string>
 </resources>
