@@ -2,6 +2,8 @@ package com.rizwa.moveiemania;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -100,7 +102,36 @@ public class MainActivity extends AppCompatActivity {
                 TextView TxtVuIncomingMovieTitle = ConvertedView.findViewById(R.id.txt_vu_mov_title);
                 String incomingTitle = TxtVuIncomingMovieTitle.getText().toString();
                 Toast.makeText(MainActivity.this, incomingTitle, Toast.LENGTH_SHORT).show();
+
+                //creating a popup menu
+                PopupMenu popup = new PopupMenu(MainActivity.this, TxtVuIncomingMovieTitle);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.main2);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_settings:
+                                //handle menu1 click
+                                Toast.makeText(MainActivity.this, "god", Toast.LENGTH_SHORT).show();
+                                break;
+//                            case R.id.menu2:
+//                                //handle menu2 click
+//                                break;
+
+//                            case R.id.menu3:
+//                                //handle menu3 click
+//                                break;
+                        }
+                        return false;
+                    }
+                });
+                //displaying the popup
+                popup.show();
             }
+
+
         });
     }
 }

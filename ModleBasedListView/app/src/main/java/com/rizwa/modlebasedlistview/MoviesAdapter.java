@@ -41,6 +41,7 @@ public class MoviesAdapter extends ArrayAdapter<MoviesModel> {
         convertView = mLayoutInflater.inflate(designResourceFile, parent, false);
 
         ImageView imgVuIcon = convertView.findViewById(R.id.img_vu_icon);
+        ImageView imgVuClose = convertView.findViewById(R.id.img_vu_close);
         TextView txtVuTitle = convertView.findViewById(R.id.txt_vu_title);
         TextView txtVuSubTitle = convertView.findViewById(R.id.txt_vu_subtitle);
 

@@ -2,6 +2,7 @@ package com.rizwa.modlebasedlistview;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,13 +42,29 @@ public class MainActivity extends AppCompatActivity {
         lstVuMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View incomingView, int i, long l) {
-
-                ImageView imgVuIcon = incomingView.findViewById(R.id.img_vu_icon);
+//
+//                ImageView imgVuIcon = incomingView.findViewById(R.id.img_vu_icon);
                 TextView txtVuTitle = incomingView.findViewById(R.id.txt_vu_title);
-                TextView txtVuSubTitle = incomingView.findViewById(R.id.txt_vu_subtitle);
+//                TextView txtVuSubTitle = incomingView.findViewById(R.id.txt_vu_subtitle);
+                ImageView imgVuClose = incomingView.findViewById(R.id.img_vu_close);
+
+                PopupMenu mPopupMenu = new PopupMenu(MainActivity.this,imgVuClose);
+
+                mPopupMenu.inflate(R.menu.main_menu);
+                mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                mPopupMenu.show();
+
 
             }
         });
+
+
     }
 
     @Override
@@ -77,4 +94,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 }
