@@ -103,32 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 String incomingTitle = TxtVuIncomingMovieTitle.getText().toString();
                 Toast.makeText(MainActivity.this, incomingTitle, Toast.LENGTH_SHORT).show();
 
-                //creating a popup menu
-                PopupMenu popup = new PopupMenu(MainActivity.this, TxtVuIncomingMovieTitle);
-                //inflating menu from xml resource
-                popup.inflate(R.menu.main2);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_settings:
-                                //handle menu1 click
-                                Toast.makeText(MainActivity.this, "god", Toast.LENGTH_SHORT).show();
-                                break;
-//                            case R.id.menu2:
-//                                //handle menu2 click
-//                                break;
-
-//                            case R.id.menu3:
-//                                //handle menu3 click
-//                                break;
-                        }
-                        return false;
-                    }
-                });
-                //displaying the popup
-                popup.show();
             }
 
 
