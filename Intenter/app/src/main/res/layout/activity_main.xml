@@ -34,5 +34,35 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cmaera" />
+
+    <Button
+        android:id="@+id/btn_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SMS" />
+
+    <Button
+        android:id="@+id/btn_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contatcts" />
+
+    <Button
+        android:id="@+id/btn_vid_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Camera" />
+
+    <Button
+        android:id="@+id/btn_browser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Browser" />
+
 
 </LinearLayout>
