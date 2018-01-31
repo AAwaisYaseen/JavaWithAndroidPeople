@@ -60,7 +60,18 @@ public class DBMS extends SQLiteOpenHelper {
         //Toast.makeText(mContext, "", Toast.LENGTH_SHORT).show();
     }
 
-//    public Cursor readAllUsers(SQLiteDatabase db) {
+
+    public Cursor getDataFromDatabase(SQLiteDatabase readbAbleDb) {
+
+// way 2nd
+    Cursor tobeReturnedCursor = readbAbleDb.rawQuery("Select * From user_detail_tbl ",null);
+
+    return  tobeReturnedCursor;
+    }
+
+//way 1st
+
+//    public Cursor getDataFromDatabase(SQLiteDatabase db) {
 //
 //        String[] selectionArgs  = {
 //                "user_r_num",
