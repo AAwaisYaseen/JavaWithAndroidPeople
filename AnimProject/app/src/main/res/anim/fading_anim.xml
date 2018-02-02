@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<alpha
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromAlpha="1"
+    android:toAlpha="0"
+    android:duration = "3000"
+    />
+
+
+
+
+
+
+<!--the animations in views are of four types-->
+
+<!--ALPHA-->
+<!-- it is a fading animation-->
+<!--SCALE-->
+<!--thats sizing animation-->
+<!--ROTATE-->
+<!--roatate over an angle-->
+<!--TRANSLATE-->
+<!--MOVE A VIEW ANY WHERE ON OR OUT OF THE SCREEN-->
