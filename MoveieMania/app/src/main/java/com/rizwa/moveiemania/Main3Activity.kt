@@ -17,7 +17,24 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.fragment_main3.view.*
 
-class Main3Activity : AppCompatActivity() {
+class Main3Activity : AppCompatActivity(),View.OnClickListener{
+
+    override fun onClick(p0: View?) {
+        val id  =p0!!.id
+
+        when(id){
+            R.id.action_bar->{
+
+            }R.id.action0->{
+
+            }R.id.save_image_matrix->{
+
+            }R.id.add->{
+
+            }
+        }
+
+    }
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -60,6 +77,7 @@ class Main3Activity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
+
 
         if (id == R.id.action_settings) {
             return true

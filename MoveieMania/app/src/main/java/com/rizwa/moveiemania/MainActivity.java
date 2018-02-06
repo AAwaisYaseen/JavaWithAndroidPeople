@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         lstVuMovies = findViewById(R.id.lst_vu_movies);
 
         moviesAdapter = new MoviesCustomArrayAdapter(MainActivity.this,
@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 MovieTitles,
                 MovieSubTitles,
                 MovieImages);
+
+
 
         lstVuMovies.setAdapter(moviesAdapter);
 
@@ -107,5 +109,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
     }
 }
