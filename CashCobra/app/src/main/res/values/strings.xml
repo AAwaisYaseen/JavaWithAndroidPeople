@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">CashCobra</string>
+    <string name="app_name">Cash Cobra</string>
+    <string name="user_name">Name</string>
+    <string name="user_email">Email</string>
+    <string name="user_password">Password</string>
+    <string name="user_conf_pass">Confirm Password</string>
+    <string name="user_address">Address</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="gender">Gender:</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="make_new_account">Make New Account</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>
