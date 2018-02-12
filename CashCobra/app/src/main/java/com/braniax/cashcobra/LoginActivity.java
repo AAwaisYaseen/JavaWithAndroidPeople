@@ -1,26 +1,35 @@
 package com.braniax.cashcobra;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText edtTxtEmailLogin,edtTxtPasswordLogin;
-    String incomingEmailLogin,incomingPasswordLogin;
+    EditText edtTxtEmailLogin, edtTxtPasswordLogin;
+    String incomingEmailLogin, incomingPasswordLogin;
     Button btnLogin;
+    TextView txtVuForgetPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         edtTxtEmailLogin = findViewById(R.id.edt_txt_email);
         edtTxtPasswordLogin = findViewById(R.id.edt_txt_password);
         btnLogin = findViewById(R.id.btn_login);
+        txtVuForgetPass = findViewById(R.id.txt_vu_forget_pass);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,20 +47,28 @@ public class LoginActivity extends AppCompatActivity {
                 incomingEmailLogin = edtTxtEmailLogin.getText().toString();
                 incomingPasswordLogin = edtTxtPasswordLogin.getText().toString();
 
-                if(incomingEmailLogin.isEmpty() && incomingPasswordLogin.isEmpty() ){
+                if (incomingEmailLogin.isEmpty() && incomingPasswordLogin.isEmpty()) {
                     edtTxtEmailLogin.setError("Fill this field");
                     edtTxtPasswordLogin.setError("Fill this field");
-                }else if(incomingEmailLogin.isEmpty()){
+                } else if (incomingEmailLogin.isEmpty()) {
                     edtTxtEmailLogin.setError("Fill this field");
-                }else if(incomingPasswordLogin.isEmpty()){
+                } else if (incomingPasswordLogin.isEmpty()) {
                     edtTxtPasswordLogin.setError("Fill this field");
-                }else if( isEmailValid(incomingEmailLogin) ==false){
+                } else if (isEmailValid(incomingEmailLogin) == false) {
                     edtTxtEmailLogin.setError("Email is not valid");
-                }else{
+                } else {
                     // volley wala kam yha hoyga
-                    getServerLoginCheck(incomingEmailLogin,incomingPasswordLogin);
+                    PostServerLoginCheck(incomingEmailLogin, incomingPasswordLogin);
                 }
 
+            }
+        });
+
+        txtVuForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomForgetPassDilaog mDialog = new CustomForgetPassDilaog(LoginActivity.this);
+                mDialog.show();
             }
         });
 
@@ -75,13 +93,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     // check user login from server
 
-    public void getServerLoginCheck(String userEmail,String userPassword){
+    public void getServerLoginCheck(String userEmail, String userPassword) {
 
-        StringRequest mStringRequest = new StringRequest(1,
-                "http://10.0.2.2:8080/cash_cobra/test_file.php?pEmail="+userEmail+"&pPassword="+userPassword,
+        StringRequest mStringRequest = new StringRequest(0,
+                "http://10.0.2.2:8080/cash_cobra/test_file.php?pEmail=" + userEmail + "&pPassword=" + userPassword,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -91,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(LoginActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "" + error, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -99,6 +116,68 @@ public class LoginActivity extends AppCompatActivity {
 
         RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
         mRequestQueue.add(mStringRequest);
+    }
+
+    // sending a request to server using volley' power of POST
+    public void PostServerLoginCheck(final String userEmail, final String userPassword) {
+
+        StringRequest mStringRequest = new StringRequest(Request.Method.POST,
+                "http://10.0.2.2:8080/cash_cobra/test_file.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> myParamsMap = new HashMap<>();
+                myParamsMap.put("pEmail",userEmail);
+                myParamsMap.put("pPassword",userPassword);
+
+                return myParamsMap;
+            }
+        };
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
+        mRequestQueue.add(mStringRequest);
+
+
+    }
+
+
+
+
+    // custom class for froget pasword dialogbox
+
+
+    private class CustomForgetPassDilaog extends Dialog{
+
+       private  Context mcontext;
+
+        CustomForgetPassDilaog(Context mcontext){
+            super(mcontext);
+            this.mcontext = mcontext;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.forget_pass_custom_layout);
+            getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+
+        }
+
+
+
     }
 
 
