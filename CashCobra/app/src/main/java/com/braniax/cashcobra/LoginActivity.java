@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
     public void PostServerLoginCheck(final String userEmail, final String userPassword) {
 
         StringRequest mStringRequest = new StringRequest(Request.Method.POST,
-                "http://10.0.2.2:8080/cash_cobra/test_file.php",
+                "http://10.0.2.2/cash_cobra/get_all_users.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -134,13 +135,13 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }
-        ){
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> myParamsMap = new HashMap<>();
-                myParamsMap.put("pEmail",userEmail);
-                myParamsMap.put("pPassword",userPassword);
+                myParamsMap.put("pEmail", userEmail);
+                myParamsMap.put("pPassword", userPassword);
 
                 return myParamsMap;
             }
@@ -153,32 +154,55 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
     // custom class for froget pasword dialogbox
 
 
-    private class CustomForgetPassDilaog extends Dialog{
+    private class CustomForgetPassDilaog extends Dialog {
 
-       private  Context mcontext;
+        private Context mcontext;
+        private Button btnEcho;
+        private EditText edtTxtEcho;
 
-        CustomForgetPassDilaog(Context mcontext){
+        CustomForgetPassDilaog(Context mcontext) {
             super(mcontext);
             this.mcontext = mcontext;
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.forget_pass_custom_layout);
+            edtTxtEcho = findViewById(R.id.edt_txt_echoed);
+            btnEcho = findViewById(R.id.btn_echo);
             getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            btnEcho.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String incomingMsg = edtTxtEcho.getText().toString();
+                    showToast(incomingMsg,1);
+
+                }
+            });
 
 
         }
 
 
-
     }
 
+
+    //---------------method for toast controll------------//
+
+    public void showToast(String msg, int length) {
+
+        if (length == 0) {
+            Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+        } else if (length == 1) {
+
+            Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
+        }
+    }
 
 }
