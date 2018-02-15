@@ -2,6 +2,8 @@ package com.braniax.cashcobra;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     String incomingEmailLogin, incomingPasswordLogin;
     Button btnLogin;
     TextView txtVuForgetPass;
+    FrameLayout LoginContainerFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         edtTxtPasswordLogin = findViewById(R.id.edt_txt_password);
         btnLogin = findViewById(R.id.btn_login);
         txtVuForgetPass = findViewById(R.id.txt_vu_forget_pass);
+        LoginContainerFrame = findViewById(R.id.login_container_frame);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,11 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                     edtTxtEmailLogin.setError("Fill this field");
                 } else if (incomingPasswordLogin.isEmpty()) {
                     edtTxtPasswordLogin.setError("Fill this field");
-                } else if (isEmailValid(incomingEmailLogin) == false) {
+                } else if (!isEmailValid(incomingEmailLogin)) {
                     edtTxtEmailLogin.setError("Email is not valid");
                 } else {
-                    // volley wala kam yha hoyga
-                    PostServerLoginCheck(incomingEmailLogin, incomingPasswordLogin);
+                    StartLoginProcess(incomingEmailLogin, incomingPasswordLogin);
                 }
 
             }
@@ -74,6 +81,46 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    private void StartLoginProcess(final String incomingEmailLogin,final String incomingPasswordLogin) {
+
+        StringRequest mStringRequest = new StringRequest(1,
+                "http://10.0.2.2/cash_cobra/loginUser.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equalsIgnoreCase("true")){
+                            showSnackbar("WELCOME",1);
+                        }else{
+                            showSnackbar("WRONG CREDENTIALS",0);
+                            edtTxtEmailLogin.setError("check this");
+                            edtTxtPasswordLogin.setError("check this");
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        showSnackbar(error.toString(),1);
+                    }
+              }
+
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("pEmail",incomingEmailLogin);
+                params.put("pPassword",incomingPasswordLogin);
+                return params;
+            }
+        };
+
+        RequestQueue mREqRequestQueue = Volley.newRequestQueue(this);
+        mREqRequestQueue.add(mStringRequest);
+
+    }
+
+
 
 
     //  REGULER EXPRESSION MATCHING  in java its done by the usage of Pattern Class
@@ -92,69 +139,6 @@ public class LoginActivity extends AppCompatActivity {
         else
             return false;
     }
-
-
-    // check user login from server
-
-    public void getServerLoginCheck(String userEmail, String userPassword) {
-
-        StringRequest mStringRequest = new StringRequest(0,
-                "http://10.0.2.2:8080/cash_cobra/test_file.php?pEmail=" + userEmail + "&pPassword=" + userPassword,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Toast.makeText(LoginActivity.this, "" + error, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
-        RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
-        mRequestQueue.add(mStringRequest);
-    }
-
-    // sending a request to server using volley' power of POST
-    public void PostServerLoginCheck(final String userEmail, final String userPassword) {
-
-        StringRequest mStringRequest = new StringRequest(Request.Method.POST,
-                "http://10.0.2.2/cash_cobra/get_all_users.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> myParamsMap = new HashMap<>();
-                myParamsMap.put("pEmail", userEmail);
-                myParamsMap.put("pPassword", userPassword);
-
-                return myParamsMap;
-            }
-        };
-
-        RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
-        mRequestQueue.add(mStringRequest);
-
-
-    }
-
-
-    // custom class for froget pasword dialogbox
 
 
     private class CustomForgetPassDilaog extends Dialog {
@@ -181,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String incomingMsg = edtTxtEcho.getText().toString();
-                    showToast(incomingMsg,1);
+                    showToast(incomingMsg, 1);
 
                 }
             });
@@ -204,5 +188,82 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
         }
     }
+    public void showSnackbar(String msg, int type) {
+
+        Snackbar mSnackbar  = Snackbar.make(LoginContainerFrame,msg,3000);
+
+        if (type == 0) {
+            mSnackbar.getView().setBackgroundColor(getApplicationContext().getResources().getColor(R.color.RED));
+            mSnackbar.show();
+        } else if (type == 1) {
+
+            mSnackbar.getView().setBackgroundColor(getApplicationContext().getResources().getColor(R.color.Green));
+            mSnackbar.show();
+        }
+    }
+
+
+// basic volley practices
+    //    // check user login from server
+//
+//    public void getServerLoginCheck(String userEmail, String userPassword) {
+//
+//        StringRequest mStringRequest = new StringRequest(0,
+//                "http://10.0.2.2:8080/cash_cobra/test_file.php?pEmail=" + userEmail + "&pPassword=" + userPassword,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//                Toast.makeText(LoginActivity.this, "" + error, Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//
+//
+//        RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
+//        mRequestQueue.add(mStringRequest);
+//    }
+//
+//    // sending a request to server using volley' power of POST
+//    public void PostServerLoginCheck(final String userEmail, final String userPassword) {
+//
+//        StringRequest mStringRequest = new StringRequest(Request.Method.POST,
+//                "http://10.0.2.2/cash_cobra/get_all_users.php",
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//
+//                Map<String, String> myParamsMap = new HashMap<>();
+//                myParamsMap.put("pEmail", userEmail);
+//                myParamsMap.put("pPassword", userPassword);
+//
+//                return myParamsMap;
+//            }
+//        };
+//
+//        RequestQueue mRequestQueue = Volley.newRequestQueue(LoginActivity.this);
+//        mRequestQueue.add(mStringRequest);
+//
+//
+//    }
+
+
+    // custom class for froget pasword dialogbox
 
 }
