@@ -2,6 +2,7 @@ package com.braniax.cashcobra;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtVuForgetPass;
     FrameLayout LoginContainerFrame;
 
+    SessionManager mSessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         txtVuForgetPass = findViewById(R.id.txt_vu_forget_pass);
         LoginContainerFrame = findViewById(R.id.login_container_frame);
+
+        mSessionManager = new SessionManager(LoginActivity.this);
+
+        if(mSessionManager.userIsloggedORNot() == true ){
+
+            Intent mIntent = new Intent(LoginActivity.this,HomePageActivity.class);
+            startActivity(mIntent);
+            finish();
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +103,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         if(response.equalsIgnoreCase("true")){
                             showSnackbar("WELCOME",1);
+
+                            mSessionManager.ControlTheSession(true,incomingEmailLogin,incomingPasswordLogin);
+
+                            Intent mIntent = new Intent(LoginActivity.this,HomePageActivity.class);
+                            startActivity(mIntent);
+                            finish();
+
+
                         }else{
                             showSnackbar("WRONG CREDENTIALS",0);
                             edtTxtEmailLogin.setError("check this");
