@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
         FirstFragment mFirstFragment  = new FirstFragment();
         loadFragmentOne(mFirstFragment);
 
-
-        SecondFragment mSecondFragment  = new SecondFragment();
-        loadFragmentTwo(mSecondFragment);
+//
+//        SecondFragment mSecondFragment  = new SecondFragment();
+//        loadFragmentTwo(mSecondFragment);
 
     }
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager mFragmentManager = getSupportFragmentManager();
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.LinLayFragOneContainer,fragmentObj);
+        mFragmentTransaction.replace(R.id.mainContainer,fragmentObj);
         mFragmentTransaction.commit();
 
     }

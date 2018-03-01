@@ -4,14 +4,67 @@ package com.infosys.fragpractive.fragsPkg;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.infosys.fragpractive.R;
 
 
 public class FirstFragment extends Fragment {
+
+    Button btnNext;
+
+
+    // all reg and click listnere will be here in this method
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        btnNext = getActivity().findViewById(R.id.btn_next);
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "YEAH ma hua click", Toast.LENGTH_SHORT).show();
+                SecondFragment mSecondFragment = new SecondFragment();
+                loadNextFragmentWithbackStack(mSecondFragment);
+            }
+        });
+    }
+
+    private void loadNextFragment(Fragment mObjFrag) {
+
+        FragmentManager mFragmentManager = getFragmentManager();
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.mainContainer,mObjFrag);
+        mFragmentTransaction.commit();
+
+    }
+
+    private void loadNextFragmentWithbackStack(Fragment mObjFrag) {
+
+        FragmentManager mFragmentManager = getFragmentManager();
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.mainContainer,mObjFrag);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -50,9 +103,4 @@ public class FirstFragment extends Fragment {
     }
 
 
-    // all reg and click listnere will be here in this method
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 }
